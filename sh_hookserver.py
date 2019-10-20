@@ -1,3 +1,4 @@
+import sys
 import socket
 import logging
 import threading
@@ -82,8 +83,12 @@ logging.basicConfig(level = logging.DEBUG)
 logging.info("Smart Home Hookserver [Aquos Control]")
 
 server = HTTPServer(('0.0.0.0', SH_WEBHOOK_PORT), IFTTTWebHook)
-thread = threading.Thread(target = server.serve_forever)
-thread.daemon = True
-thread.start()
 
-CmdShell(server).cmdloop()
+if len(sys.argv) > 1 and sys.argv[1] == "-i":
+    thread = threading.Thread(target = server.serve_forever)
+    thread.daemon = True
+    thread.start()
+    CmdShell(server).cmdloop()
+else:
+    server.serve_forever()
+
