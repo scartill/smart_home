@@ -5,6 +5,7 @@ import logging
 import threading
 import cmd
 from http.server import BaseHTTPRequestHandler, HTTPServer
+import urllib
 
 SH_WEBHOOK_PORT = 8123
 
@@ -66,9 +67,10 @@ class IFTTTWebHook(BaseHTTPRequestHandler):
         "id" : lambda: AquosCommander.channel("0402")
     }
 
-    def do_GET(self):     
-        logging.info("Web command: {}".format(self.path))
-        path = self.path.split('/')
+    def do_GET(self):
+        url = urllib.parse.unquote(self.path)
+        logging.info("Web command: {}".format(url))
+        path = url.split('/')
         
         if path[1] != args.token:
             logging.warning("Bad web token: {}".format(path[1]))
