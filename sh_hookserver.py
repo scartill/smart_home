@@ -1,3 +1,4 @@
+import argparse
 import sys
 import socket
 import logging
@@ -56,13 +57,13 @@ class AquosCommander:
             ac.send_command("DTVD", channel)
         
         
-class IFTTTWebHook(BaseHTTPRequestHandler):        
+class IFTTTWebHook(BaseHTTPRequestHandler):
     def do_GET(self):
         response = 200
                 
-        if self.path == "/Hc8jc38dc8d9d/on":
+        if self.path == "/{}/on".format(args.token):
             AquosCommander.power_on()            
-        elif self.path == "/Hc8jc38dc8d9d/off":
+        elif self.path == "/{}/off".format(args.token):
             AquosCommander.power_off()            
         else:
             logging.warning("Unknown web command")
@@ -77,14 +78,19 @@ class CmdShell(cmd.Cmd):
         
     def do_quit(self, arg):
         self.server.shutdown()
-        return True     
+        return True
 
 logging.basicConfig(level = logging.DEBUG)
 logging.info("Smart Home Hookserver [Aquos Control]")
 
+parser = argparse.ArgumentParser()
+parser.add_argument("token")
+parser.add_argument("--interactive", action = "store_true")
+args = parser.parse_args()
+
 server = HTTPServer(('0.0.0.0', SH_WEBHOOK_PORT), IFTTTWebHook)
 
-if len(sys.argv) > 1 and sys.argv[1] == "-i":
+if args.interactive:
     thread = threading.Thread(target = server.serve_forever)
     thread.daemon = True
     thread.start()
