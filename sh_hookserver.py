@@ -77,7 +77,7 @@ class IFTTTWebHook(BaseHTTPRequestHandler):
             self.send_response(401)
             return
         
-        command = str.lower(path[2])
+        command = str.lower(str.strip(path[2]))
         if not command in IFTTTWebHook.commands:
             logging.warning("Bad Aquos command: {}".format(command))
             self.send_response(400)
