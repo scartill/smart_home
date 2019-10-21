@@ -67,6 +67,7 @@ class IFTTTWebHook(BaseHTTPRequestHandler):
     }
 
     def do_GET(self):     
+        logging.info("Web command: {}".format(self.path))
         path = self.path.split('/')
         
         if path[1] != args.token:
