@@ -1,0 +1,12 @@
+[Unit]
+Description=IFTTT Webhook Server for Smart Home
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 /home/pi/smart_home/sh_hookserver.py secret-token-here
+KillMode=process
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+
