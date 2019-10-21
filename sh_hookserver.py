@@ -54,22 +54,34 @@ class AquosCommander:
     
     def channel(channel):
         with AquosControl() as ac:
-            ac.send_command("DTVD", channel)
-        
+            ac.send_command("DTVD", channel)            
         
 class IFTTTWebHook(BaseHTTPRequestHandler):
-    def do_GET(self):
-        response = 200
-                
-        if self.path == "/{}/on".format(args.token):
-            AquosCommander.power_on()            
-        elif self.path == "/{}/off".format(args.token):
-            AquosCommander.power_off()            
-        else:
-            logging.warning("Unknown web command")
-            response = 404
+
+    commands = {
+        "on" : AquosCommander.power_on,
+        "off" : AquosCommander.power_off,
+        "food" : lambda: AquosCommander.channel("0166"),
+        "tlc" : lambda: AquosCommander.channel("0032"),
+        "id" : lambda: AquosCommander.channel("0402")
+    }
+
+    def do_GET(self):     
+        path = self.path.split('/')
         
-        self.send_response(response)
+        if path[1] != args.token:
+            logging.warning("Bad web token: {}".format(path[1]))
+            self.send_response(401)
+            return
+        
+        command = string.lower(path[2])
+        if not command in IFTTTWebHook.commands:
+            logging.warning("Bad Aquos command: {}".format(command))
+            self.send_response(400)
+            return
+        
+        IFTTTWebHook.commands[command]()
+        self.send_response(200)
             
 class CmdShell(cmd.Cmd):
     def __init__(self, server):
