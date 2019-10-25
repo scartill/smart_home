@@ -18,7 +18,7 @@ class IFTTTWebHook(BaseHTTPRequestHandler):
         "food" : lambda: AquosCommander.channel("0166"),
         "tlc" : lambda: AquosCommander.channel("0032"),
         "id" : lambda: AquosCommander.channel("0402"),
-        "chrome" : lambda: AquosCommander.hdmi("0004")
+        "cast" : lambda: AquosCommander.hdmi("0004")
     }
 
     def do_GET(self):
