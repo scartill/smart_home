@@ -1,6 +1,6 @@
+import logging
 import argparse
 import sys
-import logging
 import threading
 import cmd
 from http.server import BaseHTTPRequestHandler, HTTPServer
@@ -9,7 +9,7 @@ import urllib
 from aquos import *
 
 SH_WEBHOOK_PORT = 8123
-        
+
 class IFTTTWebHook(BaseHTTPRequestHandler):
 
     commands = {
@@ -50,7 +50,7 @@ class CmdShell(cmd.Cmd):
         return True
 
 logging.basicConfig(level = logging.DEBUG)
-logging.info("Smart Home Hookserver")
+logging.info("Smart Home Hookserver [Aquos]")
 
 parser = argparse.ArgumentParser()
 parser.add_argument("token")
@@ -66,4 +66,3 @@ if args.interactive:
     CmdShell(server).cmdloop()
 else:
     server.serve_forever()
-

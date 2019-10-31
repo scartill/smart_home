@@ -53,5 +53,4 @@ class AquosCommander:
         with AquosControl() as ac:
             ac.send_command("IAVD", number)
             
-logging.info("[Aquos Control]")
             
