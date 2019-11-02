@@ -5,3 +5,6 @@ My smart home custom components
   * On command
   * Off command
   * Fixed channels selection
+  * HDMI selection
+
+[RUS] See: https://habr.com/ru/sandbox/133924/
