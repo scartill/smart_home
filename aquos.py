@@ -1,7 +1,7 @@
 import logging
 import socket
 
-AQUOS_TCP_IP = '192.168.0.107'
+AQUOS_TCP_IP = '192.168.0.3'
 AQUOS_TCP_PORT = 10002
 RVC_BUFFER_SIZE = 1024
 
