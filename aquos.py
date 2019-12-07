@@ -1,17 +1,35 @@
 import logging
 import socket
+import os
+import time
 
-AQUOS_TCP_IP = '192.168.0.3'
-AQUOS_TCP_PORT = 10002
 RVC_BUFFER_SIZE = 1024
+RETRIES = 3
+RETRY_TIMEOUT = 3
 
 class AquosControl(object):
     def __init__(self):
         self.sock = None
         
     def __enter__(self): 
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.sock.connect((AQUOS_TCP_IP, AQUOS_TCP_PORT))
+        retry = 1
+        while True:
+            try:
+                self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                self.sock.connect((os.getenv('AQUOS_TCP_IP'), int(os.getenv('AQUOS_TCP_PORT'))))
+            except Exception as exc:
+                logging.warning("Connect exception {} (retry {})".format(exc, retry))
+                self.sock.close()
+
+                if retry < RETRIES:
+                    retry += 1
+                    time.sleep(RETRY_TIMEOUT)
+                    continue
+                else:
+                    raise
+            else:
+                break
+
         return self
   
     def __exit__(self, exc_type, exc_value, exc_traceback): 

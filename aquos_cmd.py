@@ -1,8 +1,8 @@
 import logging
 import sys
-from aquos import *
+from aquos import AquosControl
 
-logging.basicConfig(level = logging.DEBUG, force = True)
+logging.basicConfig(level = logging.DEBUG)
 logging.info("Sharp Aquos Command")
 
 with AquosControl() as ac:

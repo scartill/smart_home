@@ -3,6 +3,8 @@ Description=IFTTT Webhook Server for Smart Home
 After=network.target
 
 [Service]
+Environment="AQUOS_TCP_IP=192.168.0.3"
+Environment="AQUOS_TCP_PORT=10002"
 ExecStart=/usr/bin/python3 /home/pi/smart_home/sh_hookserver.py secret-token-here
 KillMode=process
 Restart=on-failure
